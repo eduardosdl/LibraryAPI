@@ -10,10 +10,10 @@ app.use(express.urlencoded({extended: true}));
 // mongoose
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/biblio').then(() => {
-    console.log('Banco de dados conectado com sucesso');
+	console.log('Banco de dados conectado com sucesso');
 }).catch((err) => console.log(`falha ao se conectar: ${err}`));
 
-// rotas
+// routes
 app.use('/category', category);
 
 const port = 3000;

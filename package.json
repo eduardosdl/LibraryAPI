@@ -1,13 +1,21 @@
 {
   "name": "primeiraapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "minha primeria api",
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardosdl/primeiraAPI.git"
+  },
   "author": "Eduardo Silva",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardosdl/primeiraAPI/issues"
+  },
+  "homepage": "https://github.com/eduardosdl/primeiraAPI#readme",
   "dependencies": {
     "express": "^4.18.1",
     "mongoose": "^6.5.1"
