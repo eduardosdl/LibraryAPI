@@ -6,6 +6,6 @@ router.get('/', categoryController.getCategory);
 
 router.post('/new', categoryController.createCategory);
 
-router.delete('/delete/:id', categoryController.deleteCategory);
+router.delete('/del/:id', categoryController.deleteCategory);
 
 module.exports = router;
