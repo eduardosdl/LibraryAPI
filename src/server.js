@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const user = require('./routes/user');
 const book = require('./routes/book');
 const category = require('./routes/category');
 
@@ -15,7 +16,8 @@ mongoose.connect('mongodb://localhost/biblio').then(() => {
 }).catch((err) => console.log(`falha ao se conectar: ${err}`));
 
 // routes
-app.use('/book', book)
+app.use('/user', user);
+app.use('/book', book);
 app.use('/category', category);
 
 const port = 3000;
