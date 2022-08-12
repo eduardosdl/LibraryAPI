@@ -3,7 +3,7 @@ require('../models/User');
 const User = mongoose.model('users');
 const bcrypt = require('bcrypt');
 require('dotenv/config');
-const jwt = require('jsonwebtoken');
+const jwt = require('../helpers/jwt')
 
 const newUser = async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
@@ -64,6 +64,55 @@ const newUser = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    if(!email) {
+        return res.status(400).send({
+            msg: "O email é obrigatório"
+        });
+    }
+
+    if(!password) {
+        return res.status(400).send({
+            msg: "A senha é obrigatório"
+        });
+    }
+
+    const user = await User.findOne({ email });
+    
+    if(!user) {
+        return res.status(404).send({
+            msg: "Usuário não encontrado"
+        });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if(!checkPassword) {
+        return res.status(400).send({
+            msg: "Senha incorreta"
+        });
+    }
+
+    try {
+        const secret = process.env.SECRET
+        const token = jwt.sign({ id: user._id });
+
+        res.status(200).send({
+            msg: "Logado com sucesso",
+            token
+        })
+    } catch (err) {
+        console.log('erro: '+err);
+    
+        res.status(500).send({
+            msg: "Houve um erro no servidor, tente novamente mais tarde"
+        });
+    }
+}
+
 module.exports = {
-    newUser
+    newUser,
+    loginUser
 }
