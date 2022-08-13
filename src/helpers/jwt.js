@@ -8,7 +8,15 @@ const sign = (payload) => {
     return token;
 }
 
+const verify = (token) => {
+    const secret = process.env.SECRET;
+    const payload = jwt.verify(token, secret);
+
+    return payload;
+}
+
 module.exports = {
-    sign
+    sign,
+    verify
 }
     
