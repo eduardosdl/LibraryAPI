@@ -4,11 +4,13 @@ const { Schema } = mongoose;
 const User = new Schema({
     name: {
         type: String,
-        require: true
+        require: true,
+        lowercase: true
     },
     email: {
         type: String,
-        require: true
+        require: true,
+        unique: true
     },
     password: {
         type: String,
@@ -16,12 +18,12 @@ const User = new Schema({
     },
     admin: {
         type: Boolean,
-        defaul: false
-    },
-    creationDate: { 
-        type: Date, 
-        default: Date.now
+        default: false
+
     }
+}, 
+{ 
+    timestamps: true
 });
 
-mongoose.model('users', User)
+mongoose.model('users', User);
