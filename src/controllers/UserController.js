@@ -50,9 +50,16 @@ const newUser = async (req, res) => {
 
     try {
         await user.save()
+        const token = jwt.sign({id: user._id, admin: user.admin});
 
         res.status(201).send({
-            msg: "Usuário criado com sucesso"
+            msg: "Usuário criado e logado com sucesso",
+            data: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            },
+            token
         });
     } catch (err){
         console.log('erro: '+err);
