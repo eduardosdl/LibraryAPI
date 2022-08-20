@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 require('../models/User');
 const User = mongoose.model('users');
 const bcrypt = require('bcrypt');
-require('dotenv/config');
-const jwt = require('../helpers/jwt')
+const jwt = require('../helpers/jwt');
 
 const newUser = async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
@@ -65,7 +64,8 @@ const newUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const [ , hash ] = req.headers.authorization.split(' ');
+    const [email, password] = Buffer.from(hash, 'base64').toString().split(':');
 
     if(!email) {
         return res.status(400).send({
@@ -96,13 +96,17 @@ const loginUser = async (req, res) => {
     }
 
     try {
-        const secret = process.env.SECRET
-        const token = jwt.sign({ id: user._id });
+        const token = jwt.sign({ id: user._id, admin: user.admin });
 
         res.status(200).send({
             msg: "Logado com sucesso",
+            data: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            },
             token
-        })
+        });
     } catch (err) {
         console.log('erro: '+err);
     
