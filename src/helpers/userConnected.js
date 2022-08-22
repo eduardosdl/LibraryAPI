@@ -12,8 +12,8 @@ module.exports = {
         }
 
         try {
-            jwt.verify(token)
-
+            jwt.verify(token);
+            
             next();
         } catch (err) {
             res.status(400).send({
