@@ -123,7 +123,45 @@ const loginUser = async (req, res) => {
     }
 }
 
+const deleteUser = async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if(!user) {
+        return res.status(404).send({
+            msg: "Usuário não encontrado"
+        });
+    }
+
+    const checkPassword = await bcrypt.compare(req.body.password, user.password);
+
+    if(!checkPassword) {
+        return res.status(400).send({
+            msg: "Senha incorreta"
+        });
+    }
+
+    try {
+        await User.deleteOne({_id: user._id});
+
+        res.status(200).send({
+            msg: "Usuário apagado com sucesso",
+            data: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
+    } catch (err) {
+        console.log('erro: '+err);
+    
+        res.status(500).send({
+            msg: "Houve um erro no servidor, tente novamente mais tarde"
+        });
+    }
+}
+
 module.exports = {
     newUser,
-    loginUser
+    loginUser,
+    deleteUser
 }
