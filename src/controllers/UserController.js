@@ -8,25 +8,25 @@ const newUser = async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
 
     if(!name) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "O nome é obrigatorio"
         });
     }
 
     if(!email) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "O email é obrigatório"
         });
     }
 
     if(!password) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "A senha é obrigatório"
         });
     }
     
     if(password != confirmPassword) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "As senhas não condizem"
         });
     }
@@ -34,7 +34,7 @@ const newUser = async (req, res) => {
     const userExists = await User.findOne({ email });
     
     if(userExists) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "Já exites um usuário com esse email"
         });
     }
@@ -75,13 +75,13 @@ const loginUser = async (req, res) => {
     const [email, password] = Buffer.from(hash, 'base64').toString().split(':');
 
     if(!email) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "O email é obrigatório"
         });
     }
 
     if(!password) {
-        return res.status(400).send({
+        return res.status(422).send({
             msg: "A senha é obrigatório"
         });
     }
@@ -97,7 +97,7 @@ const loginUser = async (req, res) => {
     const checkPassword = await bcrypt.compare(password, user.password);
 
     if(!checkPassword) {
-        return res.status(400).send({
+        return res.status(401).send({
             msg: "Senha incorreta"
         });
     }
@@ -135,7 +135,7 @@ const deleteUser = async (req, res) => {
     const checkPassword = await bcrypt.compare(req.body.password, user.password);
 
     if(!checkPassword) {
-        return res.status(400).send({
+        return res.status(401).send({
             msg: "Senha incorreta"
         });
     }
