@@ -3,31 +3,81 @@ require('../models/Category');
 const Category = mongoose.model('categories');
 
 const getCategory = async (req, res) => {
-  Category.find().then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => console.log(`Houve um erro: ${err}`));
+  try {
+    const categories = await Category.find();
+
+    res.status(200).send(categories);
+  } catch (err) {
+    console.log(`Houve um erro: ${err}`);
+
+    res.staus(500).send({
+      msg: "Houve um erro interno, tente novamente mais tarde"
+    });
+  }
 }
 
 const createCategory = async (req, res) => {
-  const newCategory = {
-    name: req.body.name.toLowerCase()
+  const nameNewCategory = req.body.name.toLowerCase();
+  const categoryExists = await Category.findOne({ name: nameNewCategory });
+
+  if(categoryExists) {
+    return res.status(422).send({
+      msg: "Já exites uma categoria com esse nome"
+    });
   }
 
-  Category.create(newCategory).then(() => {
-    res.status(200).send({
-      message: "Categoria criada co  sucesso",
-      data: newCategory
+  const category = new Category ({
+    name: nameNewCategory
+  });
+
+  try {
+    await category.save();
+
+    res.status(201).send({
+      msg: "Categoria criada com sucesso",
+      data: {
+        name: category.name
+      }
     });
-  }).catch((err) => cosole.log(`Houve um erro: ${err}`));
+  } catch (err) {
+    console.log(`Houve um erro: ${err}`);
+
+    res.staus(500).send({
+      msg: "Houve um erro interno, tente novamente mais tarde"
+    });
+  }
 }
 
 const deleteCategory = async (req, res) => {
-  Category.findByIdAndDelete(req.params.id).then((data) => {
-    res.status(200).send({
-      message: "Categoria apagada com sucesso",
-      info: data
+  const idCategory = req.params.id;
+
+  if(!idCategory) {
+    return res.status(422).send({
+      msg: "É necessário envar o id como parametro"
     });
-  }).catch((err) => console.log(`Houve um erro: ${err}`));
+  }
+
+  try {
+    const category = await Category.findByIdAndDelete(idCategory);
+
+    if(!category) {
+      return res.status(404).send({
+        msg: "Não exite categoria com esse id"
+      });
+    }
+
+    res.status(200).send({
+      msg: "Categoria apagada com sucesso",
+      data: category
+    });
+
+  } catch (err) {
+    console.log(`Houve um erro: ${err}`);
+
+    res.staus(500).send({
+      msg: "Houve um erro interno, tente novamente mais tarde"
+    });
+  }
 }
 
 module.exports = {
