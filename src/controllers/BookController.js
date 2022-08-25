@@ -5,11 +5,17 @@ const Book = mongoose.model('books');
 const Category = mongoose.model('categories');
 
 const getBooks = async (req, res) => {
-    Book.find().then((books) => {
+    try { 
+        const books = await Book.find();
+
         res.status(200).send(books);
-    }).catch((err) => {
-        console.log(`Houve um erro: ${err}`)
-    });
+    } catch (err) {
+        console.log(`Houve um erro: ${err}`);
+
+        res.status(500).send({
+            msg: "houve um erro tente novamente mais tarde"
+        });
+    }
 }
 
 const createBook = async (req, res) => {
@@ -35,14 +41,22 @@ const createBook = async (req, res) => {
 }
 
 const deleteBook = async (req, res) => {
-    Book.findByIdAndDelete(req.params.id).then((Book) => {
+    const id = req.params.id;
+
+    try {
+        const book = await Book.findByIdAndDelete(id);
+
         res.status(200).send({
             message: "Livro apagado com sucesso",
             info: book
         });
-    }).catch((err) => {
-        console.log(`houve um erro: ${err}`);
-    });
+    } catch (err) {
+        console.log(`Houve um erro: ${err}`);
+
+        res.status(500).send({
+            msg: "houve um erro tente novamente mais tarde"
+        });
+    }
 }
 
 module.exports = {
