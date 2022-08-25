@@ -48,6 +48,31 @@ const createCategory = async (req, res) => {
   }
 }
 
+const editCategory = async (req, res) => {
+  const idCategory = req.params.id;
+  const category = {
+   name: req.body.name
+  }
+
+  try {
+    const oldCategory = await Category.findOneAndUpdate({ _id: idCategory }, category);
+
+    res.status(200).send({
+      msg: "Atualização feita com sucesso",
+      oldData: {
+        name: oldCategory.name
+      },
+      newData: category
+    })
+  } catch (err) {
+    console.log(`Houve um erro: ${err}`);
+
+    res.staus(500).send({
+      msg: "Houve um erro interno, tente novamente mais tarde"
+    });
+  }
+}
+
 const deleteCategory = async (req, res) => {
   const idCategory = req.params.id;
 
@@ -83,5 +108,6 @@ const deleteCategory = async (req, res) => {
 module.exports = {
   getCategory,
   createCategory,
+  editCategory,
   deleteCategory
 }
