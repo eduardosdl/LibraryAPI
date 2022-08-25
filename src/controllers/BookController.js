@@ -19,25 +19,37 @@ const getBooks = async (req, res) => {
 }
 
 const createBook = async (req, res) => {
-    const category = await Category.findOne({
-        name: req.body.category
-    });
+    const { name, author, edition } = req.body;
 
-    const newBook = {
-        name: req.body.name,
-        author: req.body.author,
-        edition: req.body.edition,
-        category: category.id
+    const category = await Category.findOne({ name: req.body.category });
+    
+    if(!category) {
+        return res.status(404).send({
+            msg: "Categoria não encontrada"
+        });
     }
 
-    Book.create(newBook).then(() => {
-        res.status(200).send({
-            message: "novo livro criado com sucesso",
-            data: newBook
-        }).catch((err) => {
-            console.log(`Houve um erro: ${err}`);
-        })
-    })
+    const book = new Book({
+        name,
+        author,
+        edition,
+        category: category._id
+    });
+
+    try {
+        await book.save();
+
+        res.status(201).send({
+            msg: "Livro criado com sucesso",
+            data: book
+        });
+    } catch (err) {
+        console.log(`Houve um erro: ${err}`);
+
+        res.status(500).send({
+            msg: "houve um erro tente novamente mais tarde"
+        });
+    }
 }
 
 const deleteBook = async (req, res) => {
