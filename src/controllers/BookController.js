@@ -4,11 +4,39 @@ require('../models/Category');
 const Book = mongoose.model('books');
 const Category = mongoose.model('categories');
 
-const getBooks = async (req, res) => {
+const getAllBooks = async (req, res) => {
     try { 
         const books = await Book.find();
 
         res.status(200).send(books);
+    } catch (err) {
+        console.log(`Houve um erro: ${err}`);
+
+        res.status(500).send({
+            msg: "houve um erro tente novamente mais tarde"
+        });
+    }
+}
+
+const getBook = async (req, res) => {
+    const { name } = req.params;
+
+    try {
+        const book = await Book.find({ name });
+
+        console.log(book)
+
+        if(!book.length) {
+            return res.status(404).send({
+                msg: "livro não encontrado"
+            });
+        }
+
+        res.status(200).send({
+            book: book[0],
+            quantity: book.length
+        });
+
     } catch (err) {
         console.log(`Houve um erro: ${err}`);
 
@@ -72,7 +100,8 @@ const deleteBook = async (req, res) => {
 }
 
 module.exports = {
-    getBooks,
+    getAllBooks,
+    getBook,
     createBook,
     deleteBook
 }
