@@ -4,7 +4,9 @@ const categoryController = require('../controllers/CategoryController');
 const { userConnected } = require('../helpers/userConnected');
 const { adminConnected } = require('../helpers/adminConected');
 
-router.get('/', categoryController.getCategory);
+router.get('/', categoryController.getAllCategories);
+
+router.get('/:name', categoryController.getCategory);
 
 router.post('/new', categoryController.createCategory);
 
