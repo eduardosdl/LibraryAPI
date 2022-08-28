@@ -1,12 +1,35 @@
 const mongoose = require('mongoose');
+require('../models/Book');
 require('../models/Category');
+const Book = mongoose.model('books');
 const Category = mongoose.model('categories');
 
-const getCategory = async (req, res) => {
+const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
 
     res.status(200).send(categories);
+  } catch (err) {
+    console.log(`Houve um erro: ${err}`);
+
+    res.staus(500).send({
+      msg: "Houve um erro interno, tente novamente mais tarde"
+    });
+  }
+}
+
+const getCategory = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const category = await Category.findOne({ name });
+    const books = await Book.find({ category: category._id });
+
+    res.status(200).send({
+      category,
+      quantity: books.length,
+      books
+    })
   } catch (err) {
     console.log(`Houve um erro: ${err}`);
 
@@ -55,7 +78,7 @@ const editCategory = async (req, res) => {
   }
 
   try {
-    const oldCategory = await Category.findOneAndUpdate({ _id: idCategory }, category);
+    const oldCategory = await Category.findByIdAndUpdate(idCategory, category);
 
     res.status(200).send({
       msg: "Atualização feita com sucesso",
@@ -106,6 +129,7 @@ const deleteCategory = async (req, res) => {
 }
 
 module.exports = {
+  getAllCategories,
   getCategory,
   createCategory,
   editCategory,
