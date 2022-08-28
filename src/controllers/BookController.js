@@ -80,6 +80,50 @@ const createBook = async (req, res) => {
     }
 }
 
+const editBook = async (req, res) => {
+    const idBook = req.params.id;
+    const { name, author, edition } = req.body;
+
+    const category = await Category.findOne({ name: req.body.category });
+    
+    if(!category) {
+        return res.status(404).send({
+            msg: "Categoria não encontrada"
+        });
+    }
+
+    const updateBook = {
+        name,
+        author,
+        edition,
+        category: category._id
+    }
+
+    try { 
+        const oldBook = await Book.findByIdAndUpdate(idBook, updateBook);
+        const oldCategory = await Category.findById(oldBook.category);
+
+        updateBook.category = category.name;
+
+        res.status(200).send({
+            msg: "Atualização feita com sucesso",
+            oldData: {
+                name: oldBook.name,
+                author: oldBook.author,
+                edition: oldBook.edition,
+                category: oldCategory.name
+            },
+            newData: updateBook
+        });
+    } catch (err) {
+        console.log(`Houve um erro: ${err}`);
+
+        res.status(500).send({
+            msg: "houve um erro tente novamente mais tarde"
+        });
+    }
+}
+
 const deleteBook = async (req, res) => {
     const id = req.params.id;
 
@@ -103,5 +147,6 @@ module.exports = {
     getAllBooks,
     getBook,
     createBook,
+    editBook,
     deleteBook
 }
