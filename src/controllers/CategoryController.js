@@ -98,11 +98,19 @@ const editCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   const idCategory = req.params.id;
+  const force = req.query.force;
+  const books = await Book.find({ category: idCategory });
 
   if(!idCategory) {
     return res.status(422).send({
       msg: "É necessário envar o id como parametro"
     });
+  }
+
+  if(books.length && force != "true") {
+    return res.status(422).send({
+      msg: "É necessário envar o id como parametro"
+    }); 
   }
 
   try {
