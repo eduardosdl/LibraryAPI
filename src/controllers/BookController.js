@@ -24,8 +24,6 @@ const getBook = async (req, res) => {
     try {
         const book = await Book.find({ name });
 
-        console.log(book)
-
         if(!book.length) {
             return res.status(404).send({
                 msg: "livro não encontrado"
@@ -129,6 +127,12 @@ const deleteBook = async (req, res) => {
 
     try {
         const book = await Book.findByIdAndDelete(id);
+
+        if(!book) {
+            return res.status(404).send({
+                msg: "Livro não encontrado"
+            });
+        }
 
         res.status(200).send({
             message: "Livro apagado com sucesso",
