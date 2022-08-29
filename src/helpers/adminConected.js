@@ -7,7 +7,7 @@ module.exports = {
 
         if(!token) {
             return res.status(401).send({
-                msg: "Acesso negado"
+                msg: "Acesso negado, você precisa estar logado"
             });
         }
 
@@ -15,13 +15,15 @@ module.exports = {
             const { isAdmin } = jwt.verify(token);
 
             if(!isAdmin) {
-                throw "você não é um admin";
+                return res.status(401).send({
+                    msg: "Você não é um admin"
+                });
             }
 
             next();
         } catch (err) {
             res.status(400).send({
-                msg: `token inválido ${err}`
+                msg: `token inválido`
             });
         }
     }

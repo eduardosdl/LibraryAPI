@@ -7,7 +7,7 @@ module.exports = {
 
         if(!token) {
             return res.status(401).send({
-                msg: "Acesso negado"
+                msg: "Acesso negado, você precisar estar logado"
             });
         }
 
