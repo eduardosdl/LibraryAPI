@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const bookController = require('../controllers/BookController');
+const { userConnected } = require('../helpers/userConnected');
+const { adminConnected } = require('../helpers/adminConected');
 
-router.get('/', bookController.getAllBooks);
+router.get('/', userConnected, bookController.getAllBooks);
 
-router.get('/:name', bookController.getBook);
+router.get('/:name', userConnected, bookController.getBook);
 
-router.post('/new', bookController.createBook);
+router.post('/new', adminConnected, bookController.createBook);
 
-router.put('/edit/:id', bookController.editBook);
+router.put('/edit/:id', adminConnected, bookController.editBook);
 
-router.delete('/del/:id', bookController.deleteBook);
+router.delete('/del/:id', adminConnected, bookController.deleteBook);
 
 module.exports = router;

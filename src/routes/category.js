@@ -4,14 +4,14 @@ const categoryController = require('../controllers/CategoryController');
 const { userConnected } = require('../helpers/userConnected');
 const { adminConnected } = require('../helpers/adminConected');
 
-router.get('/', categoryController.getAllCategories);
+router.get('/', userConnected, categoryController.getAllCategories);
 
-router.get('/:name', categoryController.getCategory);
+router.get('/:name', userConnected, categoryController.getCategory);
 
-router.post('/new', categoryController.createCategory);
+router.post('/new', adminConnected, categoryController.createCategory);
 
-router.put('/edit/:id', categoryController.editCategory);
+router.put('/edit/:id', adminConnected, categoryController.editCategory);
 
-router.delete('/del/:id', categoryController.deleteCategory);
+router.delete('/del/:id', adminConnected, categoryController.deleteCategory);
 
 module.exports = router;
