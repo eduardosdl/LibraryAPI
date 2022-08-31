@@ -108,13 +108,14 @@ const deleteCategory = async (req, res) => {
   }
 
   if(books.length && force != "true") {
-    return res.status(422).send({
-      msg: "É necessário envar o id como parametro"
+    return res.status(400).send({
+      msg: "Não é possivel apagar a categoria"
     }); 
   }
-
+  
   try {
     const category = await Category.findByIdAndDelete(idCategory);
+    const deletedBooks = await Book.deleteMany({category: idCategory});
 
     if(!category) {
       return res.status(404).send({
@@ -124,13 +125,14 @@ const deleteCategory = async (req, res) => {
 
     res.status(200).send({
       msg: "Categoria apagada com sucesso",
-      data: category
+      data: category,
+      deleted_books: deletedBooks.deletedCount
     });
 
   } catch (err) {
     console.log(`Houve um erro: ${err}`);
 
-    res.staus(500).send({
+    res.status(500).send({
       msg: "Houve um erro interno, tente novamente mais tarde"
     });
   }
