@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const cors = require('cors');
 const user = require('./routes/user');
 const book = require('./routes/book');
 const category = require('./routes/category');
@@ -8,6 +9,21 @@ require('dotenv/config');
 
 // config
 const port = process.env.PORT || 3000;
+// cors
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Header',
+		'Origin, X-Requrested-With, Content-Type, Accept, Authorization'
+	);
+
+	if(req.method === 'OPTIONS') {
+		res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+		return res.status(200).send({});
+	}
+
+	next();
+});
 // express
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
