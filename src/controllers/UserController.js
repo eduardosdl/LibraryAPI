@@ -123,6 +123,36 @@ const loginUser = async (req, res) => {
     }
 }
 
+const editUserPass = async (req, res) => {
+    const { email, password, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if(!checkPassword) {
+        return res.status(401).send({
+            msg: "Senha incorreta"
+        });
+    }
+
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+
+    try {
+        await User.updateOne({ _id: user._id }, { password: passwordHash });
+
+        res.status(200).send({
+            msg: "Senha alterada com sucesso"
+        });
+    } catch (err) {
+        console.log('erro: '+err);
+    
+        res.status(500).send({
+            msg: "Houve um erro no servidor, tente novamente mais tarde"
+        });
+    }
+}
+
 const deleteUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
@@ -163,5 +193,6 @@ const deleteUser = async (req, res) => {
 module.exports = {
     newUser,
     loginUser,
+    editUserPass,
     deleteUser
 }
