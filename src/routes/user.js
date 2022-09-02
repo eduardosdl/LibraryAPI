@@ -6,6 +6,8 @@ router.post('/new', controller.newUser);
 
 router.get('/login', controller.loginUser);
 
+router.patch('/edit/:id', controller.editUser);
+
 router.patch('/edit/pass', controller.editUserPass);
 
 router.delete('/del/:id', controller.deleteUser);
