@@ -123,6 +123,50 @@ const loginUser = async (req, res) => {
     }
 }
 
+const editUser = async (req, res) => {
+    const { id } = req.params;
+    const { email, password, name } = req.body;
+
+    const user = await User.findById(id);
+    const userExists = await User.findOne({ email });
+
+    if(userExists) {
+        return res.status(422).send({
+            msg: "Já existe um usuário com esse email"
+        });
+    }
+    
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if(!checkPassword) {
+        return res.status(401).send({
+            msg: "Senha incorreta"
+        });
+    }
+
+    try {
+        await User.updateOne({ id }, { email, name });
+
+        res.status(200).send({
+            msg: "Usuário alterado com sucesso",
+            oldData: {
+                name: user.name,
+                email: user.email
+            },
+            newData: {
+                name,
+                email
+            }
+        });
+    } catch (err) {
+        console.log('erro: '+err);
+    
+        res.status(500).send({
+            msg: "Houve um erro no servidor, tente novamente mais tarde"
+        });
+    }
+}
+
 const editUserPass = async (req, res) => {
     const { email, password, newPassword } = req.body;
 
@@ -193,6 +237,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
     newUser,
     loginUser,
+    editUser,
     editUserPass,
     deleteUser
 }
