@@ -10,6 +10,8 @@ router.patch('/edit/:id', controller.editUser);
 
 router.patch('/edit/pass', controller.editUserPass);
 
+router.patch('/makeadm/:id', controller.makeAdmin);
+
 router.delete('/del/:id', controller.deleteUser);
 
 module.exports = router;
