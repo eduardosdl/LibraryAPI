@@ -197,6 +197,42 @@ const editUserPass = async (req, res) => {
     }
 }
 
+const makeAdmin = async (req, res) => {
+    const { id } = req.params;
+    const { admin } = req.query;
+    const user = await User.findById(id);
+
+    if(!user) {
+        return res.staus(404).send({
+            msg: "Usuário não encontrado"
+        });
+    }
+
+    try {
+        if(admin === "true") {
+            user.admin = true;
+        } else if (admin === "false") {
+            user.admin = false;
+        }
+
+        await user.save();
+
+        res.status(200).send({
+            data: {
+                id: user._id,
+                name: user.name,
+                admin: user.admin
+            }
+        });
+    } catch (err) {
+        console.log('erro: '+err);
+    
+        res.status(500).send({
+            msg: "Houve um erro no servidor, tente novamente mais tarde"
+        });
+    }
+}
+
 const deleteUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
@@ -239,5 +275,6 @@ module.exports = {
     loginUser,
     editUser,
     editUserPass,
+    makeAdmin,
     deleteUser
 }
