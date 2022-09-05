@@ -12,7 +12,7 @@ router.patch('/edit/:id', userConnected, controller.editUser);
 
 router.patch('/edit/pass', userConnected, controller.editUserPass);
 
-router.patch('/makeadm/:id', adminConnected, controller.makeAdmin);
+router.patch('/makeadm/:id/:admin', adminConnected, controller.makeAdmin);
 
 router.delete('/del/:id', userConnected, controller.deleteUser);
 
