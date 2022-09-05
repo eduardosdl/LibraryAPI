@@ -198,8 +198,7 @@ const editUserPass = async (req, res) => {
 }
 
 const makeAdmin = async (req, res) => {
-    const { id } = req.params;
-    const { admin } = req.query;
+    const { id, admin } = req.params;
     const user = await User.findById(id);
 
     if(!user) {
