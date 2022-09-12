@@ -33,7 +33,7 @@
    - #### Informações que devem ser enviadas
    ```
       Deve conter o login e a senha do usuário,
-      codificados com Base64  enviado através do header
+      codificados com Base64 enviado através do header
    ```
    - #### Informações que constaram na resposta
    ```
