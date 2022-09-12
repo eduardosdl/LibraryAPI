@@ -47,3 +47,30 @@
          "token": "[json web token]"
       }
    ```
+
+- ### Rota para edição de usuário
+   ```
+      Método PATCH - [url]/user/edit/:id
+   ```
+   - #### Informações que devem ser enviadas
+   ```
+      {
+         "name": "[novo nome]",
+         "email": "[novo email]",
+         "password": "[senha do usuário]"
+      }
+   ```
+   - #### Informações que constaram na resposta
+   ```
+      {
+         "msg": "Usuário alterado com sucesso",
+         "oldData": {
+            "name": "[nome antigo]",
+            "email": "[email antigo]"
+         },
+         "newData": {
+            "name": "[novo nome]",
+            "email": "[novo email]"
+         }
+      }
+   ```
