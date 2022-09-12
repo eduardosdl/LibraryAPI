@@ -26,7 +26,6 @@
          "token": "[json web token]"
       }
    ```
-<<<<<<< HEAD
 - ### Rota para criação de usuário
    ```
       Método GET - [url]/user/new
@@ -48,5 +47,3 @@
          "token": "[json web token]"
       }
    ```
-=======
->>>>>>> d9d1e8fd0fc349bd8a342912c8a88a7f47449328
