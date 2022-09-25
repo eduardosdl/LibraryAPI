@@ -5,6 +5,10 @@
       - node
       - npm
       - mongoDB
+      
+   - dotenv
+      - criar uma arquivo dotenv
+      - criar uma variavel 'SECRET' com qualquer valor
 
    - executar os segiuntes comandos na pasta do projeto
    ```
@@ -31,4 +35,4 @@
    - mongoDB
    - mongoose
 
-   ### <a href="https://github.com/eduardosdl/LibraryAPI/issues"> Para reportar erros</a>
+   #### <a href="https://github.com/eduardosdl/LibraryAPI/issues"> Para reportar erros</a>
