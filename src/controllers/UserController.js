@@ -49,8 +49,8 @@ const newUser = async (req, res) => {
     });
 
     try {
-        await user.save()
-        const token = jwt.sign({id: user._id, admin: user.isAdmin});
+        await user.save();
+        const token = jwt.sign({ id: user._id, isAdmin: user.admin });
 
         res.status(201).send({
             msg: "Usuário criado e logado com sucesso",
