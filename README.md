@@ -1,4 +1,4 @@
-## API para organização de livros em uma biblioteca
+## API com ojbetivo de oferecer um sistema de biblioteca
 
    ### Como usar
    -  dependencias
