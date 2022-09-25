@@ -1,76 +1,34 @@
-## Documentação API
+## API para organização de livros em uma biblioteca
 
-### Rotas Para Usuário
-- ### Rota para criação de usuário
-   ```
-      Método POST - [url]/user/new
-   ```
-   - #### Corpo que deve ser enviado
-   ```
-      {
-         "name": "[nome do usuário]",
-         "email": "[email do usuário]",
-         "password": "[senha de acesso]",
-         "confirmPassword": "[confirmação de senha]"
-      }
-   ```
-   - #### Informações que constaram na resposta
-   ```
-      {
-         "msg": "Usuário criado e logado com sucesso",
-         "data": {
-            "id": "[id do usuário]",
-            "name": [nome do usuário]",
-            "email": "[email do usuário]"
-         },
-         "token": "[json web token]"
-      }
-   ```
-- ### Rota para criação de usuário
-   ```
-      Método GET - [url]/user/new
-   ```
-   - #### Informações que devem ser enviadas
-   ```
-      Deve conter o login e a senha do usuário,
-      codificados com Base64 enviado através do header
-   ```
-   - #### Informações que constaram na resposta
-   ```
-      {
-         "msg": "Usuário criado e logado com sucesso",
-         "data": {
-            "id": "[id do usuário]",
-            "name": [nome do usuário]",
-            "email": "[email do usuário]"
-         },
-         "token": "[json web token]"
-      }
-   ```
+   ### Como usar
+   -  dependencias
+      - node
+      - npm
+      - mongoDB
 
-- ### Rota para edição de usuário
+   - executar os segiuntes comandos na pasta do projeto
    ```
-      Método PATCH - [url]/user/edit/:id
+      $ npm install
+
+      $ node src/server.js
    ```
-   - #### Informações que devem ser enviadas
-   ```
-      {
-         "name": "[novo nome]",
-         "email": "[novo email]",
-         "password": "[senha do usuário]"
-      }
-   ```
-   - #### Informações que constaram na resposta
-   ```
-      {
-         "msg": "Usuário alterado com sucesso",
-         "oldData": {
-            "name": "[nome antigo]",
-            "email": "[email antigo]"
-         },
-         "newData": {
-            "name": "[novo nome]",
-            "email": "[novo email]"
-         }
-      }
-   ```
+   - <a href="https://github.com/eduardosdl/primeiraAPI/wiki"> Documentação </a>
+
+   ### Objetivo
+   - exercitar a linguagem javascript
+   - aprimorar meu conhecimento em nodejs
+   - usar de forma prática banco de dados não relacional
+   - fazer uso de autenticação através de json web token
+
+   ### Tecnologias usadas
+   - Javascript
+   - nodejs
+   - express
+   - dotenv
+   - cors
+   - bcrypt
+   - json web token
+   - mongoDB
+   - mongoose
+
+   ### <a href="https://github.com/eduardosdl/primeiraAPI/issues"> Reportar erros </a>
