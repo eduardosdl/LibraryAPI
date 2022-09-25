@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eduardosdl/primeiraAPI.git"
+    "url": "https://github.com/eduardosdl/LibraryAPI"
   },
   "author": "Eduardo Silva",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/eduardosdl/primeiraAPI/issues"
+    "url": "https://github.com/eduardosdl/LibraryAPI/issues"
   },
-  "homepage": "https://github.com/eduardosdl/primeiraAPI#readme",
+  "homepage": "https://github.com/eduardosdl/LibraryAPI#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
