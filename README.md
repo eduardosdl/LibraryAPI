@@ -12,7 +12,7 @@
 
       $ node src/server.js
    ```
-   - <a href="https://github.com/eduardosdl/primeiraAPI/wiki"> Documentação </a>
+   - <a href="https://github.com/eduardosdl/LibraryAPI/wiki"> Documentação </a>
 
    ### Objetivo
    - exercitar a linguagem javascript
@@ -31,4 +31,4 @@
    - mongoDB
    - mongoose
 
-   ### <a href="https://github.com/eduardosdl/primeiraAPI/issues"> Reportar erros </a>
+   ### <a href="https://github.com/eduardosdl/LibraryAPI/issues"> Para reportar erros</a>
