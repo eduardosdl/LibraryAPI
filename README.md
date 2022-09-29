@@ -16,8 +16,9 @@
 
       $ node src/server.js
    ```
-   - <a href="https://github.com/eduardosdl/LibraryAPI/wiki"> Documentação </a>
-
+   
+   - ### [Documentação](https://github.com/eduardosdl/LibraryAPI/wiki)  
+  
    ### Objetivo
    - exercitar a linguagem javascript
    - aprimorar meu conhecimento em nodejs
