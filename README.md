@@ -36,4 +36,4 @@
    - mongoDB
    - mongoose
 
-   #### <a href="https://github.com/eduardosdl/LibraryAPI/issues"> Para reportar erros</a>
+   #### [Para reportar erros](https://github.com/eduardosdl/LibraryAPI/issues)
