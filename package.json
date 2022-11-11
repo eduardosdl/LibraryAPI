@@ -1,6 +1,6 @@
 {
   "name": "primeiraapi",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "minha primeria api",
   "main": "src/server.js",
   "scripts": {
