@@ -1,19 +1,21 @@
-const express = require('express');
-const router = express.Router();
-const controller = require('../controllers/UserController');
+const { Router } = require('express');
+
 const { userConnected } = require('../helpers/userConnected');
 const { adminConnected } = require('../helpers/adminConected');
+const controller = require('../controllers/UserController');
 
-router.post('/new', controller.newUser);
+const router = Router();
 
-router.get('/login', controller.loginUser);
+router.post('/', controller.createUser);
 
-router.patch('/edit/:id', userConnected, controller.editUser);
+router.get('/', controller.loginUser);
 
-router.patch('/edit/pass', userConnected, controller.editUserPass);
+router.patch('/', userConnected, controller.editUser);
 
-router.patch('/makeadm/:id/:admin', adminConnected, controller.makeAdmin);
+router.patch('/pass', userConnected, controller.editUserPass);
 
-router.delete('/del/:id', userConnected, controller.deleteUser);
+router.patch('/admin/:id', adminConnected, controller.editUserAdmin);
+
+router.delete('/', userConnected, controller.deleteUser);
 
 module.exports = router;
