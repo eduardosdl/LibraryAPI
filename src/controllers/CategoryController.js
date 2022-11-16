@@ -1,147 +1,90 @@
-const mongoose = require('mongoose');
-require('../models/Book');
-require('../models/Category');
-const Book = mongoose.model('books');
-const Category = mongoose.model('categories');
+const { Types } = require('mongoose');
 
-const getAllCategories = async (req, res) => {
-  try {
-    const categories = await Category.find();
+const { ObjectId } = Types;
 
-    res.status(200).send(categories);
-  } catch (err) {
-    console.log(`Houve um erro: ${err}`);
-
-    res.staus(500).send({
-      msg: "Houve um erro interno, tente novamente mais tarde"
-    });
-  }
-}
-
-const getCategory = async (req, res) => {
-  const { name } = req.params;
-
-  try {
-    const category = await Category.findOne({ name });
-    const books = await Book.find({ category: category._id });
-
-    res.status(200).send({
-      category,
-      quantity: books.length,
-      books
-    })
-  } catch (err) {
-    console.log(`Houve um erro: ${err}`);
-
-    res.staus(500).send({
-      msg: "Houve um erro interno, tente novamente mais tarde"
-    });
-  }
-}
+const Book = require('../models/Book');
+const Category = require('../models/Category');
 
 const createCategory = async (req, res) => {
-  const nameNewCategory = req.body.name.toLowerCase();
-  const categoryExists = await Category.findOne({ name: nameNewCategory });
+  const categoryName = req.body.name.toLowerCase();
+  const categoryExists = await Category.findOne({ name: categoryName });
 
-  if(categoryExists) {
-    return res.status(422).send({
-      msg: "Já exites uma categoria com esse nome"
+  if (categoryExists) {
+    return res.status(400).send({
+      msg: 'This category already exists',
     });
   }
 
-  const category = new Category ({
-    name: nameNewCategory
-  });
+  const category = await Category.create({ name: categoryName });
 
-  try {
-    await category.save();
+  res.status(201).send(category);
+};
 
-    res.status(201).send({
-      msg: "Categoria criada com sucesso",
-      data: {
-        name: category.name
-      }
-    });
-  } catch (err) {
-    console.log(`Houve um erro: ${err}`);
+const findAllCategories = async (req, res) => {
+  const categories = await Category.find();
 
-    res.staus(500).send({
-      msg: "Houve um erro interno, tente novamente mais tarde"
-    });
-  }
-}
+  res.status(200).send(categories);
+};
+
+const findCategory = async (req, res) => {
+  const { id } = req.params;
+
+  const category = await Category.aggregate([
+    { $match: { _id: ObjectId(id) } },
+    {
+      $lookup: {
+        from: 'books',
+        localField: '_id',
+        foreignField: 'category',
+        as: 'books',
+      },
+    },
+  ]);
+
+  res.status(200).send(category);
+};
 
 const editCategory = async (req, res) => {
-  const idCategory = req.params.id;
-  const category = {
-   name: req.body.name
-  }
+  const { id } = req.params;
+  const { name } = req.body;
 
-  try {
-    const oldCategory = await Category.findByIdAndUpdate(idCategory, category);
+  const categoryExists = await Category.findOne({ name });
 
-    res.status(200).send({
-      msg: "Atualização feita com sucesso",
-      oldData: {
-        name: oldCategory.name
-      },
-      newData: category
-    })
-  } catch (err) {
-    console.log(`Houve um erro: ${err}`);
-
-    res.staus(500).send({
-      msg: "Houve um erro interno, tente novamente mais tarde"
+  if (!categoryExists) {
+    return res.status(400).send({
+      error: 'This category already exists',
     });
   }
-}
+
+  await Category.updateOne({ id }, { name });
+
+  res.status(200).send({
+    id,
+    name,
+  });
+};
 
 const deleteCategory = async (req, res) => {
-  const idCategory = req.params.id;
-  const force = req.query.force;
-  const books = await Book.find({ category: idCategory });
+  const { id } = req.params;
+  const { force } = req.query;
+  const books = await Book.find({ category: id });
 
-  if(!idCategory) {
-    return res.status(422).send({
-      msg: "É necessário envar o id como parametro"
-    });
-  }
-
-  if(books.length && force != "true") {
+  if (books.length && force !== 'true') {
     return res.status(400).send({
-      msg: "Não é possivel apagar a categoria"
-    }); 
-  }
-  
-  try {
-    const category = await Category.findByIdAndDelete(idCategory);
-    const deletedBooks = await Book.deleteMany({category: idCategory});
-
-    if(!category) {
-      return res.status(404).send({
-        msg: "Não exite categoria com esse id"
-      });
-    }
-
-    res.status(200).send({
-      msg: "Categoria apagada com sucesso",
-      data: category,
-      deleted_books: deletedBooks.deletedCount
-    });
-
-  } catch (err) {
-    console.log(`Houve um erro: ${err}`);
-
-    res.status(500).send({
-      msg: "Houve um erro interno, tente novamente mais tarde"
+      error: 'Cannot delete category, have books inside',
     });
   }
-}
+
+  await Category.deleteOne({ id });
+  await Book.updateMany({ category: id }, { category: null });
+
+  res.sendStatus(200);
+};
 
 module.exports = {
-  getAllCategories,
-  getCategory,
   createCategory,
+  findAllCategories,
+  findCategory,
   editCategory,
-  deleteCategory
-}
+  deleteCategory,
+};
