@@ -50,7 +50,7 @@ const editCategory = async (req, res) => {
 
   const categoryExists = await Category.findOne({ name });
 
-  if (!categoryExists) {
+  if (categoryExists) {
     return res.status(400).send({
       error: 'This category already exists',
     });
