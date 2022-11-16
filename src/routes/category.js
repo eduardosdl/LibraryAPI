@@ -1,17 +1,19 @@
-const express = require('express');
-const router = express.Router();
-const categoryController = require('../controllers/CategoryController');
+const { Router } = require('express');
+
 const { userConnected } = require('../helpers/userConnected');
 const { adminConnected } = require('../helpers/adminConected');
+const categoryController = require('../controllers/CategoryController');
 
-router.get('/', userConnected, categoryController.getAllCategories);
+const router = Router();
 
-router.get('/:name', userConnected, categoryController.getCategory);
+router.post('/', adminConnected, categoryController.createCategory);
 
-router.post('/new', adminConnected, categoryController.createCategory);
+router.get('/', userConnected, categoryController.findAllCategories);
 
-router.put('/edit/:id', adminConnected, categoryController.editCategory);
+router.get('/:id', userConnected, categoryController.findCategory);
 
-router.delete('/del/:id', adminConnected, categoryController.deleteCategory);
+router.put('/:id', adminConnected, categoryController.editCategory);
+
+router.delete('/:id', adminConnected, categoryController.deleteCategory);
 
 module.exports = router;
