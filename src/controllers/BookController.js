@@ -1,156 +1,76 @@
-const mongoose = require('mongoose');
-require('../models/Book');
-require('../models/Category');
-const Book = mongoose.model('books');
-const Category = mongoose.model('categories');
-
-const getAllBooks = async (req, res) => {
-    try { 
-        const books = await Book.find();
-
-        res.status(200).send(books);
-    } catch (err) {
-        console.log(`Houve um erro: ${err}`);
-
-        res.status(500).send({
-            msg: "houve um erro tente novamente mais tarde"
-        });
-    }
-}
-
-const getBook = async (req, res) => {
-    const { name } = req.params;
-
-    try {
-        const book = await Book.find({ name });
-
-        if(!book.length) {
-            return res.status(404).send({
-                msg: "livro não encontrado"
-            });
-        }
-
-        res.status(200).send({
-            book: book[0],
-            quantity: book.length
-        });
-
-    } catch (err) {
-        console.log(`Houve um erro: ${err}`);
-
-        res.status(500).send({
-            msg: "houve um erro tente novamente mais tarde"
-        });
-    }
-}
+const Book = require('../models/Book');
 
 const createBook = async (req, res) => {
-    const { name, author, edition } = req.body;
+  const {
+    name, author, edition, category,
+  } = req.body;
 
-    const category = await Category.findOne({ name: req.body.category });
-    
-    if(!category) {
-        return res.status(404).send({
-            msg: "Categoria não encontrada"
-        });
-    }
-
-    const book = new Book({
-        name,
-        author,
-        edition,
-        category: category._id
+  if (!name || !author) {
+    return res.status(422).send({
+      error: 'Name and author are required',
     });
+  }
 
-    try {
-        await book.save();
+  const book = await Book.create({
+    name,
+    author,
+    edition,
+    category,
+  });
 
-        res.status(201).send({
-            msg: "Livro criado com sucesso",
-            data: book
-        });
-    } catch (err) {
-        console.log(`Houve um erro: ${err}`);
+  res.status(201).send(book);
+};
 
-        res.status(500).send({
-            msg: "houve um erro tente novamente mais tarde"
-        });
-    }
-}
+const getAllBooks = async (req, res) => {
+  const books = await Book.find().populate('category');
+
+  res.status(200).send(books);
+};
+
+const getBook = async (req, res) => {
+  const { id } = req.params;
+
+  const book = await Book.findById(id);
+
+  if (!book) {
+    return res.status(404).send({
+      msg: 'livro não encontrado',
+    });
+  }
+
+  res.status(200).send(book);
+};
 
 const editBook = async (req, res) => {
-    const idBook = req.params.id;
-    const { name, author, edition } = req.body;
+  const { id } = req.params;
+  const {
+    name, author, edition, category,
+  } = req.body;
 
-    const category = await Category.findOne({ name: req.body.category });
-    
-    if(!category) {
-        return res.status(404).send({
-            msg: "Categoria não encontrada"
-        });
-    }
+  await Book.findByIdAndUpdate(id, {
+    name,
+    author,
+    edition,
+    category,
+  });
 
-    const updateBook = {
-        name,
-        author,
-        edition,
-        category: category._id
-    }
-
-    try { 
-        const oldBook = await Book.findByIdAndUpdate(idBook, updateBook);
-        const oldCategory = await Category.findById(oldBook.category);
-
-        updateBook.category = category.name;
-
-        res.status(200).send({
-            msg: "Atualização feita com sucesso",
-            oldData: {
-                name: oldBook.name,
-                author: oldBook.author,
-                edition: oldBook.edition,
-                category: oldCategory.name
-            },
-            newData: updateBook
-        });
-    } catch (err) {
-        console.log(`Houve um erro: ${err}`);
-
-        res.status(500).send({
-            msg: "houve um erro tente novamente mais tarde"
-        });
-    }
-}
+  res.status(200).send({
+    name, author, edition, category,
+  });
+};
 
 const deleteBook = async (req, res) => {
-    const id = req.params.id;
+  const { id } = req.params;
 
-    try {
-        const book = await Book.findByIdAndDelete(id);
+  await Book.findByIdAndDelete(id);
 
-        if(!book) {
-            return res.status(404).send({
-                msg: "Livro não encontrado"
-            });
-        }
-
-        res.status(200).send({
-            message: "Livro apagado com sucesso",
-            info: book
-        });
-    } catch (err) {
-        console.log(`Houve um erro: ${err}`);
-
-        res.status(500).send({
-            msg: "houve um erro tente novamente mais tarde"
-        });
-    }
-}
+  res.sendStatus(204);
+};
 
 module.exports = {
-    getAllBooks,
-    getBook,
-    createBook,
-    editBook,
-    deleteBook
-}
+  getAllBooks,
+  getBook,
+  createBook,
+  editBook,
+  deleteBook,
+};
