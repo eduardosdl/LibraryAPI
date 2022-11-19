@@ -6,8 +6,8 @@ const category = require('./routes/category');
 
 const router = Router();
 
-router.use('/user', user);
-router.use('/book', book);
-router.use('/category', category);
+router.use('/users', user);
+router.use('/books', book);
+router.use('/categories', category);
 
 module.exports = router;
