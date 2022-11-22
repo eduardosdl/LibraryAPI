@@ -13,5 +13,7 @@ module.exports = {
   rules: {
     'consistent-return': 'off',
     'no-underscore-dangle': 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+    camelcase: 'off',
   },
 };
