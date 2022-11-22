@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
-const { userConnected } = require('../helpers/userConnected');
-const { adminConnected } = require('../helpers/adminConected');
+const { userConnected } = require('../middlewares/userConnected');
+const { adminConnected } = require('../middlewares/adminConected');
 const bookController = require('../controllers/BookController');
 
 const router = Router();

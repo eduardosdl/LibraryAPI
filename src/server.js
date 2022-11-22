@@ -4,6 +4,7 @@ require('express-async-errors');
 
 const cors = require('./middlewares/cors');
 const router = require('./router');
+const error = require('./middlewares/errorHandler');
 
 const app = express();
 
@@ -23,9 +24,6 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@localh
 }).catch((err) => console.log(`err${err}`));
 // routes
 app.use(router);
-app.use((error, request, response, next) => {
-  console.log(error);
-  response.sendStatus(500);
-});
+app.use(error);
 
 app.listen(port, () => console.log(`Server rodando em http://localhost:${port}`));
