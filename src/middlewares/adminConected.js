@@ -1,4 +1,4 @@
-const jwt = require('./jwt');
+const jwt = require('../helpers/jwt');
 
 module.exports = {
   adminConnected: async (req, res, next) => {
