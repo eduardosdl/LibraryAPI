@@ -30,7 +30,7 @@ const getAllBooks = async (req, res) => {
 const getBook = async (req, res) => {
   const { id } = req.params;
 
-  const book = await Book.findById(id);
+  const book = await Book.findById(id).populate('category');
 
   if (!book) {
     return res.status(404).send({
